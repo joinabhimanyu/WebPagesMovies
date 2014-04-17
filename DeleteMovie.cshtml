@@ -1,0 +1,72 @@
+﻿@{
+    
+Layout="~/_Layout.cshtml";
+Page.Title="Delete Movie";
+
+var db=Database.Open("WebPagesMovies");
+    var Title="";
+    var Genre="";
+    var Year="";
+
+
+         var selectqstring="select * from Movies where ID=@0";
+    var id=UrlData[0];
+    if(id.IsEmpty())
+    {
+        Response.Redirect("~/EditMovie");
+    }
+    var movie=db.QuerySingle(selectqstring,id);
+    Title=movie.Title.Trim();
+    Genre=movie.Genre.Trim();
+    Year=movie.Year.Trim();
+
+    if(IsPost)
+    {
+        var deletestring="delete from Movies where ID=@0";
+        db.Execute(deletestring,id.Trim());
+        Response.Redirect(Href("~/ListMovies"));
+    }
+
+}
+
+
+
+             <div class="page-header">
+                <h3>Delete Movie</h3>
+                 </div>
+
+            <div class="row">
+                <div class="col-md-10">
+                <ul class="list-inline">
+                    <li><a href="@Href("~/EditMovie")">Exit without deleting</a></li>
+                    </ul>
+            </div>
+                </div>
+
+            <div class="row">
+                <div class="col-md-4 well">
+                    
+                    <form action="" method="post" role="form">
+                        <fieldset>
+                            <legend>Are you sure to delete?</legend>
+                            <div class="form-group">
+                                <label>Title : @Title</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Genre : @Genre</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Year : @Year</label>
+                            </div>
+                             <div>
+                        <button type="submit" class="btn btn-default">Delete</button>
+                    </div>
+                        </fieldset>
+                          </form>
+
+                     </div>
+                 </div>
+
+          

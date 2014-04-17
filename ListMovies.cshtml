@@ -1,0 +1,113 @@
+﻿
+@{
+    
+Layout="~/_Layout.cshtml";
+Page.Title="Movies List";
+
+    var db=Database.Open("WebPagesMovies");
+    bool result=false;
+    var selectstring="select * from Movies";
+    var link_go_back="none";
+    int count=0;
+    var movies=db.Query(selectstring);
+    foreach(var c in movies)
+    {
+        count=count+1;
+    }
+    
+    var Title=Request.QueryString["Title"];
+    var Genre=Request.QueryString["Genre"];
+
+    if(Title!=null)
+    {
+        if(!Title.ToString().IsEmpty())
+        {
+            result=Functions.isNotString(Title.ToString().Trim());
+            if(result==false)
+            {
+                count=0;
+                selectstring="select * from Movies where Title like @0";
+                var qstring="%" + Title.Trim() + "%";
+                movies=db.Query(selectstring,qstring.Trim());
+                foreach(var c in movies)
+                {
+                    count=count+1;
+                }
+                link_go_back="block";
+            }
+            
+        }
+    }
+    
+
+    if(Genre!=null)
+    {
+        if(!Genre.ToString().IsEmpty())
+    {
+        result=Functions.isNotString(Genre.ToString().Trim());
+        if(result==false)
+        {
+            count=0;
+            selectstring="select * from Movies where Genre like @0";
+            var qstring="%" + Genre.Trim() + "%";
+            movies=db.Query(selectstring,qstring.Trim());
+            foreach(var c in movies)
+                {
+                    count=count+1;
+                }
+            link_go_back="block";    
+        }       
+        
+    }
+    }
+
+    
+    var grid=new WebGrid(source : movies,defaultSort: "Year");
+
+
+ }
+
+@if(result==true)
+{
+    <p style="color: #4b6c9e">Invalid Search String</p>
+}
+
+@if(count==0)
+{
+    <p style="color: #4b6c9e">No Results for this Search</p>
+}
+
+            <div class="page-header">
+                <h3>List of Movies</h3>
+                 </div>
+
+            <div class="row">
+                <div class="col-md-10" style="padding-left: 10px;">
+                <ul class="list-inline">
+                    <li><a href="@Href("~/InsertMovie")">Add Movie</a></li>
+                    <li><a href="@Href("~/EditMovie")">Edit Movie</a></li>
+                    <li><a href="~/ListMovies" style="display: @link_go_back;">Back to Movies List</a></li>
+                    </ul>
+                        </div>
+                </div>
+<div class="row">
+    
+
+                        </div>   
+                   
+                   
+            <div class="row" style="margin-top: 20px;">
+
+                <div class="col-md-11 well">
+
+                    @grid.GetHtml(
+                tableStyle: "table table-striped table-bordered",
+                columns: grid.Columns(          
+                    grid.Column("Title",format:@<a href="#">@item.Title</a>),
+                    grid.Column("Genre"),
+                    grid.Column("Year")
+                )
+            )
+                     </div>
+                 </div>
+   

@@ -1,0 +1,49 @@
+﻿@{
+    var message="This is the Title of the Partial Page";
+    Page.Title="Partial page";
+
+
+
+}
+
+<div class="row">
+<div class="col-md-6">
+    
+    <form method="get" action="~/ListMovies" class="form-inline" id="form_title">
+    <input type="text" name="Title" id="Title" class="form-control" placeholder="Search by Title" value="@Request.QueryString["Title"]">
+    
+      </form>
+
+     </div>
+
+    <div class="col-md-6">
+
+        <form method="get" action="~/ListMovies" class="form-inline" id="form_genre">
+    <input type="text" name="Genre" id="Genre" class="form-control" placeholder="Search by Genre" value="@Request.QueryString["Genre"]">
+    
+      </form>
+
+         </div>
+</div>
+         
+
+
+<script type="text/javascript">
+
+    $("#Title").keyup(function (event) {
+        if (event.which == 13) {
+            $("#form_title").submit();
+        }
+
+    });
+
+    $("#Genre").keyup(function (event) {
+        if (event.which == 13) {
+            $("#form_genre").submit();
+        }
+
+    });
+
+
+</script>
+    

@@ -1,0 +1,84 @@
+﻿@{
+    
+Layout="~/_Layout.cshtml";
+Page.Title="Update Movie";
+
+Validation.RequireField("Title","Title cannot be emty");
+Validation.RequireField("Genre","Genre cannot be emty");
+Validation.RequireField("Year","Year cannot be emty");
+
+    var db=Database.Open("WebPagesMovies");
+    var Title="";
+    var Genre="";
+    var Year="";
+
+
+         var selectqstring="select * from Movies where ID=@0";
+    var id=UrlData[0];
+    if(id.IsEmpty())
+    {
+        Response.Redirect("~/EditMovie");
+    }
+    var movie=db.QuerySingle(selectqstring,id);
+    Title=movie.Title.Trim();
+    Genre=movie.Genre.Trim();
+    Year=movie.Year.Trim();
+
+
+    if(IsPost && Validation.IsValid())
+    {
+        if(ModelState.IsValid)
+        {
+
+            Title=Request.Form["Title"];
+            Genre=Request.Form["Genre"];
+            Year=Request.Form["Year"];
+
+            var updateqstring="UPDATE Movies SET Title=@0, Genre=@1, Year=@2 where ID=@3";
+            db.Execute(updateqstring,Title.Trim(),Genre.Trim(),Year.Trim(),id.Trim());
+            Response.Redirect(Href("~/EditMovie"));
+        }
+    }
+
+}
+
+
+
+            <div class="page-header">
+                <h3>Update Movie Information</h3>
+                 </div>
+            <div class="row">
+                <div class="col-md-10" style="padding-left: 10px">
+                <ul class="list-inline">
+                    <li><a href="@Href("~/EditMovie")">Exit without saving</a></li>
+                    </ul>
+            </div>
+                </div>
+
+            <div class="row">
+                <div class="col-md-5">        
+            
+                    @Html.ValidationSummary()
+            <form action="" method="post" role="form">
+                <fieldset>
+                    <legend>Enter Information</legend>
+                    <div class="form-group">
+                        <label for="Title">Title:</label>
+                        <input type="text" class="form-control" id="Title" name="Title" size="50" value="@Title">
+                    </div>
+                    <div class="form-group">
+                        <label for="Genre">Genre:</label>
+                        <input type="text" class="form-control" id="Genre" name="Genre" size="50" value="@Genre">
+                    </div>
+                    <div class="form-group">
+                        <label for="Year">Year:</label>
+                        <input type="text" class="form-control" id="Year" name="Year" size="10" value="@Year">
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default">Save</button>
+                    </div>
+                </fieldset>
+                  </form>
+                    </div>
+                </div>
+          

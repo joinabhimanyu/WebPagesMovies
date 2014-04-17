@@ -1,0 +1,16 @@
+﻿@using System;
+@using Microsoft.VisualBasic;
+
+
+@functions {
+    
+public static bool isNotString(string value)
+{
+   decimal n;
+   bool result=decimal.TryParse(value,out n);
+   return result;
+    
+}
+
+
+}

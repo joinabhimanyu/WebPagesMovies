@@ -1,0 +1,72 @@
+﻿@{
+    
+Layout="~/_Layout.cshtml";
+Page.Title="Validation Page";
+
+    Validation.RequireField("username","username is required");
+    Validation.RequireField("password","password is required");
+
+    if(IsPost && Validation.IsValid())
+    {
+        if(ModelState.IsValid)
+        {
+            var username=Request["username"];
+            var password=Request["password"];
+
+        }
+    }
+
+    var display="none";
+    var name=UrlData[0];
+    if(name.IsEmpty())
+    {
+        Validation.AddFormError("No querystring passed to the page");    
+    }
+    else
+    {
+        display="block";
+    }
+
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div class="row">
+            <a href="~/ListMovies">Go back to Movies List</a>
+             </div>
+        <div class="row">
+            <h3 style="display: @display">You entered @name.ToString()</h3>
+             </div>
+        <div class="row">
+            @Html.ValidationSummary()
+            <div class="col-md-2">
+            <form method="post">
+                <fieldset>
+                    <legend>enter information</legend>
+                    <div class="form-group">
+                        <label for="username">Username : </label>
+                        <input type="text" name="username" class="form-control" value="@Request["username"]">
+                        @Html.ValidationMessage("username")
+                         </div>
+                    <div class="form-group">
+                        <label for="password">Password : </label>
+                        <input type="text" name="password" class="form-control" value="@Request["password"]">
+                        @Html.ValidationMessage("password")
+                         </div>
+                    
+                    <input type="submit" value="Submit">
+                </fieldset>
+
+                  </form>
+                </div>
+
+             </div>
+
+    </body>
+</html>
